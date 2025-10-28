@@ -1,0 +1,122 @@
+[2025-10-28T18:59:04.613+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-10-28T18:59:04.617+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:59:03.286522+00:00 [queued]>
+[2025-10-28T18:59:04.619+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:59:03.286522+00:00 [queued]>
+[2025-10-28T18:59:04.619+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2025-10-28T18:59:04.623+0000] {taskinstance.py:2888} INFO - Executing <Task(SnowflakeOperator): create_and_load_raw_tables> on 2025-10-28 18:59:03.286522+00:00
+[2025-10-28T18:59:04.625+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=836) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-10-28T18:59:04.626+0000] {standard_task_runner.py:72} INFO - Started process 843 to run task
+[2025-10-28T18:59:04.626+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'etl_raw_sessions', 'create_and_load_raw_tables', 'manual__2025-10-28T18:59:03.286522+00:00', '--job-id', '7', '--raw', '--subdir', 'DAGS_FOLDER/etl_raw_sessions.py', '--cfg-path', '/tmp/tmpzf2xr5kv']
+[2025-10-28T18:59:04.627+0000] {standard_task_runner.py:105} INFO - Job 7: Subtask create_and_load_raw_tables
+[2025-10-28T18:59:04.641+0000] {task_command.py:467} INFO - Running <TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:59:03.286522+00:00 [running]> on host 956b3ea59049
+[2025-10-28T18:59:04.663+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='etl_raw_sessions' AIRFLOW_CTX_TASK_ID='create_and_load_raw_tables' AIRFLOW_CTX_EXECUTION_DATE='2025-10-28T18:59:03.286522+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-10-28T18:59:03.286522+00:00'
+[2025-10-28T18:59:04.663+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-10-28T18:59:04.670+0000] {sql.py:266} INFO - Executing: 
+-- Context for your environment
+USE WAREHOUSE GORILLA_WH_XSMALL;
+USE DATABASE USER_DB_GORILLA;
+USE SCHEMA RAW;
+
+-- Create tables if they don't exist
+CREATE TABLE IF NOT EXISTS USER_SESSION_CHANNEL (
+  SESSION_ID STRING,
+  USER_ID    STRING,
+  CHANNEL    STRING
+);
+
+CREATE TABLE IF NOT EXISTS SESSION_TIMESTAMP (
+  SESSION_ID STRING,
+  EVENT_TS   TIMESTAMP_NTZ
+);
+
+-- Seed demo rows for the assignment (remove TRUNCATE/INSERT if using real data)
+TRUNCATE TABLE USER_SESSION_CHANNEL;
+TRUNCATE TABLE SESSION_TIMESTAMP;
+
+INSERT INTO USER_SESSION_CHANNEL (SESSION_ID, USER_ID, CHANNEL) VALUES
+  ('s1','u1','web'),
+  ('s2','u1','web'),
+  ('s3','u2','ios'),
+  ('s4','u3','android');
+
+INSERT INTO SESSION_TIMESTAMP (SESSION_ID, EVENT_TS) VALUES
+  ('s1','2025-10-10 08:00:00'),
+  ('s1','2025-10-10 08:10:00'),
+  ('s2','2025-10-11 09:00:00'),
+  ('s3','2025-10-12 10:00:00'),
+  ('s4','2025-10-17 12:30:00');
+[2025-10-28T18:59:04.673+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T18:59:04.676+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T18:59:04.676+0000] {connection.py:413} INFO - Snowflake Connector for Python Version: 3.12.1, Python Version: 3.12.5, Platform: Linux-6.10.14-linuxkit-aarch64-with-glibc2.36
+[2025-10-28T18:59:04.677+0000] {connection.py:1196} INFO - Connecting to GLOBAL Snowflake domain
+[2025-10-28T18:59:04.677+0000] {connection.py:1277} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2025-10-28T18:59:05.349+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:05.350+0000] {sql.py:509} INFO - Running statement: -- Context for your environment
+USE WAREHOUSE GORILLA_WH_XSMALL;, parameters: None
+[2025-10-28T18:59:05.542+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:05.543+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:05.544+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:05.544+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-cc2f-000f-c0df005bbcce
+[2025-10-28T18:59:05.545+0000] {sql.py:509} INFO - Running statement: USE DATABASE USER_DB_GORILLA;, parameters: None
+[2025-10-28T18:59:05.698+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:05.699+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:05.699+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:05.700+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-ccda-000f-c0df005c63e6
+[2025-10-28T18:59:05.700+0000] {sql.py:509} INFO - Running statement: USE SCHEMA RAW;, parameters: None
+[2025-10-28T18:59:05.934+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:05.935+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:05.935+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:05.935+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-d056-000f-c0df005c47e6
+[2025-10-28T18:59:05.936+0000] {sql.py:509} INFO - Running statement: -- Create tables if they don't exist
+CREATE TABLE IF NOT EXISTS USER_SESSION_CHANNEL (
+  SESSION_ID STRING,
+  USER_ID    STRING,
+  CHANNEL    STRING
+);, parameters: None
+[2025-10-28T18:59:06.226+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:06.227+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:06.227+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:06.227+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-cdd6-000f-c0df005bdc8e
+[2025-10-28T18:59:06.227+0000] {sql.py:509} INFO - Running statement: CREATE TABLE IF NOT EXISTS SESSION_TIMESTAMP (
+  SESSION_ID STRING,
+  EVENT_TS   TIMESTAMP_NTZ
+);, parameters: None
+[2025-10-28T18:59:06.545+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:06.546+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:06.546+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:06.547+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-cc30-000f-c0df005bfb7e
+[2025-10-28T18:59:06.547+0000] {sql.py:509} INFO - Running statement: -- Seed demo rows for the assignment (remove TRUNCATE/INSERT if using real data)
+TRUNCATE TABLE USER_SESSION_CHANNEL;, parameters: None
+[2025-10-28T18:59:07.051+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:07.052+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:07.052+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:07.052+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-cd8a-000f-c0df005bebca
+[2025-10-28T18:59:07.052+0000] {sql.py:509} INFO - Running statement: TRUNCATE TABLE SESSION_TIMESTAMP;, parameters: None
+[2025-10-28T18:59:07.563+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:07.563+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T18:59:07.564+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T18:59:07.564+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-ce09-000f-c0df005c1afe
+[2025-10-28T18:59:07.564+0000] {sql.py:509} INFO - Running statement: INSERT INTO USER_SESSION_CHANNEL (SESSION_ID, USER_ID, CHANNEL) VALUES
+  ('s1','u1','web'),
+  ('s2','u1','web'),
+  ('s3','u2','ios'),
+  ('s4','u3','android');, parameters: None
+[2025-10-28T18:59:09.000+0000] {sql.py:518} INFO - Rows affected: 4
+[2025-10-28T18:59:09.001+0000] {snowflake.py:422} INFO - Rows affected: 4
+[2025-10-28T18:59:09.001+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-d034-000f-c0df005c38fa
+[2025-10-28T18:59:09.002+0000] {sql.py:509} INFO - Running statement: INSERT INTO SESSION_TIMESTAMP (SESSION_ID, EVENT_TS) VALUES
+  ('s1','2025-10-10 08:00:00'),
+  ('s1','2025-10-10 08:10:00'),
+  ('s2','2025-10-11 09:00:00'),
+  ('s3','2025-10-12 10:00:00'),
+  ('s4','2025-10-17 12:30:00');, parameters: None
+[2025-10-28T18:59:09.755+0000] {sql.py:518} INFO - Rows affected: 5
+[2025-10-28T18:59:09.756+0000] {snowflake.py:422} INFO - Rows affected: 5
+[2025-10-28T18:59:09.756+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00493-0206-cc2f-000f-c0df005bbcd2
+[2025-10-28T18:59:10.638+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T18:59:10.639+0000] {connection.py:788} INFO - closed
+[2025-10-28T18:59:10.696+0000] {connection.py:794} INFO - No async queries seem to be running, deleting session
+[2025-10-28T18:59:10.841+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-10-28T18:59:10.841+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=etl_raw_sessions, task_id=create_and_load_raw_tables, run_id=manual__2025-10-28T18:59:03.286522+00:00, execution_date=20251028T185903, start_date=20251028T185904, end_date=20251028T185910
+[2025-10-28T18:59:10.886+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-10-28T18:59:10.892+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-10-28T18:59:10.893+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

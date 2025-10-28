@@ -1,0 +1,180 @@
+[2025-10-28T18:55:22.689+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-10-28T18:55:22.694+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:55:21.670523+00:00 [queued]>
+[2025-10-28T18:55:22.696+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:55:21.670523+00:00 [queued]>
+[2025-10-28T18:55:22.696+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2025-10-28T18:55:22.700+0000] {taskinstance.py:2888} INFO - Executing <Task(SnowflakeOperator): create_and_load_raw_tables> on 2025-10-28 18:55:21.670523+00:00
+[2025-10-28T18:55:22.703+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=707) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-10-28T18:55:22.703+0000] {standard_task_runner.py:72} INFO - Started process 710 to run task
+[2025-10-28T18:55:22.703+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'etl_raw_sessions', 'create_and_load_raw_tables', 'manual__2025-10-28T18:55:21.670523+00:00', '--job-id', '6', '--raw', '--subdir', 'DAGS_FOLDER/etl_raw_sessions.py', '--cfg-path', '/tmp/tmpe_ks9r45']
+[2025-10-28T18:55:22.704+0000] {standard_task_runner.py:105} INFO - Job 6: Subtask create_and_load_raw_tables
+[2025-10-28T18:55:22.726+0000] {task_command.py:467} INFO - Running <TaskInstance: etl_raw_sessions.create_and_load_raw_tables manual__2025-10-28T18:55:21.670523+00:00 [running]> on host 956b3ea59049
+[2025-10-28T18:55:22.752+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='etl_raw_sessions' AIRFLOW_CTX_TASK_ID='create_and_load_raw_tables' AIRFLOW_CTX_EXECUTION_DATE='2025-10-28T18:55:21.670523+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-10-28T18:55:21.670523+00:00'
+[2025-10-28T18:55:22.752+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-10-28T18:55:22.785+0000] {sql.py:266} INFO - Executing: 
+-- Context for your environment
+USE WAREHOUSE GORILLA_WH_XSMALL;
+USE DATABASE USER_DB_GORILLA;
+USE SCHEMA RAW;
+
+-- Create tables if they don't exist
+CREATE TABLE IF NOT EXISTS USER_SESSION_CHANNEL (
+  SESSION_ID STRING,
+  USER_ID    STRING,
+  CHANNEL    STRING
+);
+
+CREATE TABLE IF NOT EXISTS SESSION_TIMESTAMP (
+  SESSION_ID STRING,
+  EVENT_TS   TIMESTAMP_NTZ
+);
+
+-- Seed demo rows for the assignment (remove TRUNCATE/INSERT if using real data)
+TRUNCATE TABLE USER_SESSION_CHANNEL;
+TRUNCATE TABLE SESSION_TIMESTAMP;
+
+INSERT INTO USER_SESSION_CHANNEL (SESSION_ID, USER_ID, CHANNEL) VALUES
+  ('s1','u1','web'),
+  ('s2','u1','web'),
+  ('s3','u2','ios'),
+  ('s4','u3','android');
+
+INSERT INTO SESSION_TIMESTAMP (SESSION_ID, EVENT_TS) VALUES
+  ('s1','2025-10-10 08:00:00'),
+  ('s1','2025-10-10 08:10:00'),
+  ('s2','2025-10-11 09:00:00'),
+  ('s3','2025-10-12 10:00:00'),
+  ('s4','2025-10-17 12:30:00');
+[2025-10-28T18:55:22.791+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T18:55:22.794+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T18:55:22.795+0000] {connection.py:413} INFO - Snowflake Connector for Python Version: 3.12.1, Python Version: 3.12.5, Platform: Linux-6.10.14-linuxkit-aarch64-with-glibc2.36
+[2025-10-28T18:55:22.795+0000] {connection.py:1196} INFO - Connecting to GLOBAL Snowflake domain
+[2025-10-28T18:55:22.795+0000] {connection.py:1277} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2025-10-28T18:55:23.422+0000] {taskinstance.py:3310} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/common/sql/operators/sql.py", line 272, in execute
+    output = hook.run(
+             ^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/snowflake/hooks/snowflake.py", line 404, in run
+    with closing(self.get_conn()) as conn:
+                 ^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/snowflake/hooks/snowflake.py", line 300, in get_conn
+    conn = connector.connect(**conn_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 456, in __init__
+    self.connect(**kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 771, in connect
+    self.__open_connection()
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1099, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1386, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1414, in _authenticate
+    auth.authenticate(
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 401, in authenticate
+    Error.errorhandler_wrapper(
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 284, in errorhandler_wrapper
+    handed_over = Error.hand_to_other_handler(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 342, in hand_to_other_handler
+    connection.errorhandler(connection, cursor, error_class, error_value)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 215, in default_errorhandler
+    raise error_class(
+snowflake.connector.errors.DatabaseError: 250001 (08001): None: Failed to connect to DB: sfedu02-lvb17920.snowflakecomputing.com:443. Incorrect username or password was specified.
+[2025-10-28T18:55:23.429+0000] {taskinstance.py:1225} INFO - Marking task as FAILED. dag_id=etl_raw_sessions, task_id=create_and_load_raw_tables, run_id=manual__2025-10-28T18:55:21.670523+00:00, execution_date=20251028T185521, start_date=20251028T185522, end_date=20251028T185523
+[2025-10-28T18:55:23.436+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-10-28T18:55:23.436+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 6 for task create_and_load_raw_tables (250001 (08001): None: Failed to connect to DB: sfedu02-lvb17920.snowflakecomputing.com:443. Incorrect username or password was specified.; 710)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 115, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3004, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/common/sql/operators/sql.py", line 272, in execute
+    output = hook.run(
+             ^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/snowflake/hooks/snowflake.py", line 404, in run
+    with closing(self.get_conn()) as conn:
+                 ^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/providers/snowflake/hooks/snowflake.py", line 300, in get_conn
+    conn = connector.connect(**conn_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 456, in __init__
+    self.connect(**kwargs)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 771, in connect
+    self.__open_connection()
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1099, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1386, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1414, in _authenticate
+    auth.authenticate(
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 401, in authenticate
+    Error.errorhandler_wrapper(
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 284, in errorhandler_wrapper
+    handed_over = Error.hand_to_other_handler(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 342, in hand_to_other_handler
+    connection.errorhandler(connection, cursor, error_class, error_value)
+  File "/home/airflow/.local/lib/python3.12/site-packages/snowflake/connector/errors.py", line 215, in default_errorhandler
+    raise error_class(
+snowflake.connector.errors.DatabaseError: 250001 (08001): None: Failed to connect to DB: sfedu02-lvb17920.snowflakecomputing.com:443. Incorrect username or password was specified.
+[2025-10-28T18:55:23.476+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-10-28T18:55:23.483+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-10-28T18:55:23.483+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

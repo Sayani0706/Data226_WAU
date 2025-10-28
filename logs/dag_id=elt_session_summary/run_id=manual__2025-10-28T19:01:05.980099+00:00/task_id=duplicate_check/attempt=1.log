@@ -1,0 +1,69 @@
+[2025-10-28T19:01:06.655+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-10-28T19:01:06.660+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: elt_session_summary.duplicate_check manual__2025-10-28T19:01:05.980099+00:00 [queued]>
+[2025-10-28T19:01:06.662+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: elt_session_summary.duplicate_check manual__2025-10-28T19:01:05.980099+00:00 [queued]>
+[2025-10-28T19:01:06.662+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2025-10-28T19:01:06.666+0000] {taskinstance.py:2888} INFO - Executing <Task(SnowflakeCheckOperator): duplicate_check> on 2025-10-28 19:01:05.980099+00:00
+[2025-10-28T19:01:06.669+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=909) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-10-28T19:01:06.670+0000] {standard_task_runner.py:72} INFO - Started process 912 to run task
+[2025-10-28T19:01:06.669+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'elt_session_summary', 'duplicate_check', 'manual__2025-10-28T19:01:05.980099+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/elt_session_summary.py', '--cfg-path', '/tmp/tmp6iyek6cn']
+[2025-10-28T19:01:06.672+0000] {standard_task_runner.py:105} INFO - Job 8: Subtask duplicate_check
+[2025-10-28T19:01:06.690+0000] {task_command.py:467} INFO - Running <TaskInstance: elt_session_summary.duplicate_check manual__2025-10-28T19:01:05.980099+00:00 [running]> on host 956b3ea59049
+[2025-10-28T19:01:06.714+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='elt_session_summary' AIRFLOW_CTX_TASK_ID='duplicate_check' AIRFLOW_CTX_EXECUTION_DATE='2025-10-28T19:01:05.980099+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-10-28T19:01:05.980099+00:00'
+[2025-10-28T19:01:06.715+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-10-28T19:01:06.721+0000] {sql.py:784} INFO - Executing SQL check: 
+USE WAREHOUSE GORILLA_WH_XSMALL;
+USE DATABASE USER_DB_GORILLA;
+USE SCHEMA RAW;
+
+-- Fail if any session_id appears more than once in mapping (bonus data-quality check)
+SELECT COUNT(*) = 0
+FROM (
+  SELECT SESSION_ID
+  FROM USER_SESSION_CHANNEL
+  GROUP BY SESSION_ID
+  HAVING COUNT(*) > 1
+);
+[2025-10-28T19:01:06.725+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T19:01:06.728+0000] {base.py:84} INFO - Retrieving connection 'snowflake_conn'
+[2025-10-28T19:01:06.729+0000] {connection.py:413} INFO - Snowflake Connector for Python Version: 3.12.1, Python Version: 3.12.5, Platform: Linux-6.10.14-linuxkit-aarch64-with-glibc2.36
+[2025-10-28T19:01:06.729+0000] {connection.py:1196} INFO - Connecting to GLOBAL Snowflake domain
+[2025-10-28T19:01:06.729+0000] {connection.py:1277} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2025-10-28T19:01:07.321+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:07.322+0000] {sql.py:509} INFO - Running statement: USE WAREHOUSE GORILLA_WH_XSMALL;, parameters: None
+[2025-10-28T19:01:08.214+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:08.214+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T19:01:08.214+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T19:01:08.214+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00495-0206-d033-000f-c0df005c808e
+[2025-10-28T19:01:08.215+0000] {sql.py:509} INFO - Running statement: USE DATABASE USER_DB_GORILLA;, parameters: None
+[2025-10-28T19:01:08.363+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:08.364+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T19:01:08.364+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T19:01:08.364+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00495-0206-cdd6-000f-c0df005bdc9e
+[2025-10-28T19:01:08.364+0000] {sql.py:509} INFO - Running statement: USE SCHEMA RAW;, parameters: None
+[2025-10-28T19:01:08.911+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:08.912+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T19:01:08.912+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T19:01:08.913+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00495-0206-c753-000f-c0df005c725e
+[2025-10-28T19:01:08.913+0000] {sql.py:509} INFO - Running statement: -- Fail if any session_id appears more than once in mapping (bonus data-quality check)
+SELECT COUNT(*) = 0
+FROM (
+  SELECT SESSION_ID
+  FROM USER_SESSION_CHANNEL
+  GROUP BY SESSION_ID
+  HAVING COUNT(*) > 1
+);, parameters: None
+[2025-10-28T19:01:09.843+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:09.844+0000] {sql.py:518} INFO - Rows affected: 1
+[2025-10-28T19:01:09.845+0000] {snowflake.py:422} INFO - Rows affected: 1
+[2025-10-28T19:01:09.845+0000] {snowflake.py:423} INFO - Snowflake query id: 01c00495-0206-ccda-000f-c0df005c6402
+[2025-10-28T19:01:10.139+0000] {cursor.py:1156} INFO - Number of results in first chunk: 1
+[2025-10-28T19:01:10.140+0000] {connection.py:788} INFO - closed
+[2025-10-28T19:01:10.218+0000] {connection.py:794} INFO - No async queries seem to be running, deleting session
+[2025-10-28T19:01:10.429+0000] {sql.py:787} INFO - Record: (True,)
+[2025-10-28T19:01:10.431+0000] {sql.py:795} INFO - Success.
+[2025-10-28T19:01:10.444+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-10-28T19:01:10.444+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=elt_session_summary, task_id=duplicate_check, run_id=manual__2025-10-28T19:01:05.980099+00:00, execution_date=20251028T190105, start_date=20251028T190106, end_date=20251028T190110
+[2025-10-28T19:01:10.486+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-10-28T19:01:10.497+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/models/baseoperator.py:1378 AirflowProviderDeprecationWarning: Call to deprecated class SnowflakeOperator. (This class is deprecated. Please use `***.providers.common.sql.operators.sql.SQLExecuteQueryOperator`. Also, you can provide `hook_params={'warehouse': <warehouse>, 'database': <database>, 'role': <role>, 'schema': <schema>, 'authenticator': <authenticator>,'session_parameters': <session_parameters>}`.)
+[2025-10-28T19:01:10.503+0000] {taskinstance.py:3900} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-10-28T19:01:10.504+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
